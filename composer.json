@@ -1,0 +1,53 @@
+{
+    "name": "boesing/zend-router-to-fastroute",
+    "type": "library",
+    "description": "Zend MVC extension to use fastroute router over zend-router",
+    "license": "BSD-3-clause",
+    "authors": [
+        {
+            "name": "Maximilian Bösing",
+            "email": "2189546+boesing@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "php": "^7.3",
+        "fig/http-message-util": "^1.1",
+        "zendframework/zend-eventmanager": "^3.2",
+        "zendframework/zend-expressive-fastroute": "^3.0",
+        "zendframework/zend-expressive-router": "^3.1",
+        "zendframework/zend-modulemanager": "^2.8",
+        "zendframework/zend-mvc": "^3.1",
+        "zendframework/zend-psr7bridge": "^1.2",
+        "zendframework/zend-router": "^3.3"
+    },
+    "require-dev": {
+        "jangregor/phpstan-prophecy": "^0.4.2",
+        "maglnet/composer-require-checker": "^2.0",
+        "mikey179/vfsstream": "^1.6",
+        "phpstan/extension-installer": "^1.0",
+        "phpstan/phpstan": "^0.11.15",
+        "phpstan/phpstan-phpunit": "^0.11.2",
+        "phpunit/phpunit": "^8.3",
+        "zendframework/zend-coding-standard": "^2.0"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Boesing\\ZendRouterToFastroute\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Boesing\\ZendRouterToFastrouteTest\\": "tests/"
+        }
+    },
+    "scripts": {
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "analyze": "phpstan analyze --no-progress"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

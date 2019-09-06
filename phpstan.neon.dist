@@ -1,0 +1,11 @@
+parameters:
+  level: max
+  ignoreErrors:
+    - '/^Parameter #3 \$methods of class Zend\\Expressive\\Router\\Route constructor expects array/'
+  reportUnmatchedIgnoredErrors: true
+  fileExtensions:
+    - php
+  paths:
+    - src/
+
+
