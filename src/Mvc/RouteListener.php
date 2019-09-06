@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Boesing\ZendRouterToFastroute\Mvc;
+namespace Boesing\ZendRouterToExpressiveRouter\Mvc;
 
-use Boesing\ZendRouterToFastroute\ExpressiveRouter\ConverterInterface;
+use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ConverterInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;

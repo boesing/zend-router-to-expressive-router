@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Boesing\ZendRouterToFastrouteTest\ExpressiveRouter\ZendRouterV2Converter;
+namespace Boesing\ZendRouterToExpressiveRouterTest\ExpressiveRouter\ZendRouterV2Converter;
 
-use Boesing\ZendRouterToFastroute\ExpressiveRouter\ZendRouterV2Converter\Configuration;
+use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ZendRouterV2Converter\Configuration;
 use PHPUnit\Framework\TestCase;
 
 final class ConfigurationTest extends TestCase

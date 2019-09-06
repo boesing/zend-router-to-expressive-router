@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Boesing\ZendRouterToFastroute\ExpressiveRouter;
+namespace Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter;
 
 use Webmozart\Assert\Assert;
 use Zend\Router\Http\RouteInterface;

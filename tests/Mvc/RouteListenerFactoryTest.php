@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Boesing\ZendRouterToFastrouteTest\Mvc;
+namespace Boesing\ZendRouterToExpressiveRouterTest\Mvc;
 
-use Boesing\ZendRouterToFastroute\Mvc\RouteListener;
-use Boesing\ZendRouterToFastroute\Mvc\RouteListenerFactory;
+use Boesing\ZendRouterToExpressiveRouter\Mvc\RouteListener;
+use Boesing\ZendRouterToExpressiveRouter\Mvc\RouteListenerFactory;
 use Interop\Container\ContainerInterface;
 use PHPUnit\Framework\TestCase;
 use Zend\Expressive\Router\RouterInterface;

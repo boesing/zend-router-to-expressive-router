@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Boesing\ZendRouterToFastrouteTest\ExpressiveRouter;
+namespace Boesing\ZendRouterToExpressiveRouterTest\ExpressiveRouter;
 
-use Boesing\ZendRouterToFastroute\ExpressiveRouter\AttachRoutesToRouterDelegator;
-use Boesing\ZendRouterToFastroute\Middleware\DummyMiddleware;
+use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\AttachRoutesToRouterDelegator;
+use Boesing\ZendRouterToExpressiveRouter\Middleware\DummyMiddleware;
 use Interop\Container\ContainerInterface;
 use PHPUnit\Framework\TestCase;
 use stdClass;

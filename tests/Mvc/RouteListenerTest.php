@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Boesing\ZendRouterToFastrouteTest\Mvc;
+namespace Boesing\ZendRouterToExpressiveRouterTest\Mvc;
 
-use Boesing\ZendRouterToFastroute\ExpressiveRouter\ConverterInterface;
-use Boesing\ZendRouterToFastroute\Middleware\DummyMiddleware;
-use Boesing\ZendRouterToFastroute\Mvc\RouteListener;
+use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ConverterInterface;
+use Boesing\ZendRouterToExpressiveRouter\Middleware\DummyMiddleware;
+use Boesing\ZendRouterToExpressiveRouter\Mvc\RouteListener;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\EventManager\EventManagerInterface;

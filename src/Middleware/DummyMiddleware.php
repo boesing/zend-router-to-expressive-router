@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Boesing\ZendRouterToFastroute\Middleware;
+namespace Boesing\ZendRouterToExpressiveRouter\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Boesing\ZendRouterToFastrouteTest\ExpressiveRouter\ZendRouterV2Converter;
+namespace Boesing\ZendRouterToExpressiveRouterTest\ExpressiveRouter\ZendRouterV2Converter;
 
-use Boesing\ZendRouterToFastroute\ExpressiveRouter\ZendRouterV2Converter\Configuration;
-use Boesing\ZendRouterToFastroute\ExpressiveRouter\ZendRouterV2Converter\ConfigurationFactory;
-use Boesing\ZendRouterToFastroute\ExpressiveRouter\ZendRouterV2Converter\ConfigurationInterface;
+use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ZendRouterV2Converter\Configuration;
+use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ZendRouterV2Converter\ConfigurationFactory;
+use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ZendRouterV2Converter\ConfigurationInterface;
 use Interop\Container\ContainerInterface;
 use PHPUnit\Framework\TestCase;
 

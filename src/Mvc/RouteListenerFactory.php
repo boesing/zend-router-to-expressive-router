@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Boesing\ZendRouterToFastroute\Mvc;
+namespace Boesing\ZendRouterToExpressiveRouter\Mvc;
 
 use Interop\Container\ContainerInterface;
 use Zend\Expressive\Router\RouterInterface;

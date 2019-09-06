@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Boesing\ZendRouterToFastroute\ModuleManager;
+namespace Boesing\ZendRouterToExpressiveRouter\ModuleManager;
 
 use Interop\Container\ContainerInterface;
 use Zend\ModuleManager\ModuleManager;

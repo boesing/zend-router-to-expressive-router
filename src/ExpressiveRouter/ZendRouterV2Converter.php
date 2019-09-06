@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Boesing\ZendRouterToFastroute\ExpressiveRouter;
+namespace Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter;
 
-use Boesing\ZendRouterToFastroute\ExpressiveRouter\ZendRouterV2Converter\ConfigurationInterface;
-use Boesing\ZendRouterToFastroute\Middleware\DummyMiddleware;
+use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ZendRouterV2Converter\ConfigurationInterface;
+use Boesing\ZendRouterToExpressiveRouter\Middleware\DummyMiddleware;
 use Zend\Expressive\Router\Route;
 use Zend\Router\Http\Hostname;
 use Zend\Router\Http\Literal;

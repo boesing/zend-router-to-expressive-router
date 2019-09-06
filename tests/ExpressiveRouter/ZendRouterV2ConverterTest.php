@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Boesing\ZendRouterToFastrouteTest\ExpressiveRouter;
+namespace Boesing\ZendRouterToExpressiveRouterTest\ExpressiveRouter;
 
-use Boesing\ZendRouterToFastroute\ExpressiveRouter\ConverterInterface;
-use Boesing\ZendRouterToFastroute\ExpressiveRouter\InvalidRouteConfigurationException;
-use Boesing\ZendRouterToFastroute\ExpressiveRouter\ZendRouterV2Converter;
-use Boesing\ZendRouterToFastroute\Middleware\DummyMiddleware;
+use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ConverterInterface;
+use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\InvalidRouteConfigurationException;
+use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ZendRouterV2Converter;
+use Boesing\ZendRouterToExpressiveRouter\Middleware\DummyMiddleware;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Zend\Expressive\Router\Route;

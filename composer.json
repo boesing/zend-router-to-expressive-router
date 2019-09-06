@@ -1,7 +1,7 @@
 {
-    "name": "boesing/zend-router-to-fastroute",
+    "name": "boesing/zend-router-to-expressive-router",
     "type": "library",
-    "description": "Zend MVC extension to use fastroute router over zend-router",
+    "description": "Zend MVC extension to use zend-expressive-router over zend-router",
     "license": "BSD-3-clause",
     "authors": [
         {
@@ -13,7 +13,6 @@
         "php": "^7.3",
         "fig/http-message-util": "^1.1",
         "zendframework/zend-eventmanager": "^3.2",
-        "zendframework/zend-expressive-fastroute": "^3.0",
         "zendframework/zend-expressive-router": "^3.1",
         "zendframework/zend-modulemanager": "^2.8",
         "zendframework/zend-mvc": "^3.1",
@@ -35,12 +34,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Boesing\\ZendRouterToFastroute\\": "src/"
+            "Boesing\\ZendRouterToExpressiveRouter\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Boesing\\ZendRouterToFastrouteTest\\": "tests/"
+            "Boesing\\ZendRouterToExpressiveRouterTest\\": "tests/",
+            "Boesing\\ZendRouterToExpressiveRouterIntegration\\": "integration/"
         }
     },
     "scripts": {

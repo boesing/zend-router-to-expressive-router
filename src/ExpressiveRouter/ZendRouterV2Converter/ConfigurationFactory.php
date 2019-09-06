@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Boesing\ZendRouterToFastroute\ExpressiveRouter\ZendRouterV2Converter;
+namespace Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ZendRouterV2Converter;
 
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
