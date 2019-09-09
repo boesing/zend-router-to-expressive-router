@@ -12,8 +12,6 @@ use Boesing\ZendRouterToExpressiveRouter\ModuleManager\ConfigListener;
 use Boesing\ZendRouterToExpressiveRouter\ModuleManager\ConfigListenerFactory;
 use Boesing\ZendRouterToExpressiveRouter\Mvc\RouteListener;
 use Boesing\ZendRouterToExpressiveRouter\Mvc\RouteListenerFactory;
-use Zend\Expressive\Router\FastRouteRouter;
-use Zend\Expressive\Router\FastRouteRouterFactory;
 use Zend\Expressive\Router\RouterInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;

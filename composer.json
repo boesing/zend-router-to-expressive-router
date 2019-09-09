@@ -40,7 +40,7 @@
     "autoload-dev": {
         "psr-4": {
             "Boesing\\ZendRouterToExpressiveRouterTest\\": "tests/",
-            "Boesing\\ZendRouterToExpressiveRouterIntegration\\": "integration/"
+            "Boesing\\ZendRouterToExpressiveRouterIntegration\\": "integration/src/"
         }
     },
     "scripts": {
