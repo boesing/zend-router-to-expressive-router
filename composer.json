@@ -37,6 +37,9 @@
             "module": "Boesing\\ZendRouterToExpressiveRouter"
         }
     },
+    "archive": {
+        "exclude": ["tests", "data", "phpcs.xml", "phpstan.neon.dist", "phpunit.xml.dist", "composer.lock"]
+    },
     "autoload": {
         "psr-4": {
             "Boesing\\ZendRouterToExpressiveRouter\\": "src/"
