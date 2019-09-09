@@ -32,6 +32,11 @@
     "config": {
         "sort-packages": true
     },
+    "extra": {
+        "zf": {
+            "module": "Boesing\\ZendRouterToExpressiveRouter"
+        }
+    },
     "autoload": {
         "psr-4": {
             "Boesing\\ZendRouterToExpressiveRouter\\": "src/"
@@ -39,8 +44,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Boesing\\ZendRouterToExpressiveRouterTest\\": "tests/",
-            "Boesing\\ZendRouterToExpressiveRouterIntegration\\": "integration/src/"
+            "Boesing\\ZendRouterToExpressiveRouterTest\\": "tests/"
         }
     },
     "scripts": {
