@@ -19,7 +19,7 @@ final class AttachEventsToModuleManagerDelegatorTest extends TestCase
     /**
      * @test
      */
-    public function willThrowInvalidServiceExceptionIfDelegatorUsedWrong()
+    public function willThrowInvalidServiceExceptionIfDelegatorUsedWrong() : void
     {
         $this->expectException(InvalidServiceException::class);
         $callback  = function () : stdClass {
@@ -34,18 +34,43 @@ final class AttachEventsToModuleManagerDelegatorTest extends TestCase
     /**
      * @test
      */
-    public function willAttachConfigListenerToEvents()
+    public function willAttachConfigListenerToEvents() : void
     {
-        $events         = $this->prophesize(EventManagerInterface::class)->reveal();
         $converter      = $this->prophesize(ConverterInterface::class)->reveal();
         $configListener = new ConfigListener($converter);
-        $configListener->attach($events);
+        $events         = $this->prophesize(EventManagerInterface::class);
+
+        $moduleManager = $this->prophesize(ModuleManager::class);
+        $moduleManager->getEventManager()->willReturn($events->reveal());
+
+        $container = $this->prophesize(ContainerInterface::class);
+        $container->has(ConfigListener::class)->willReturn(true);
+        $container->get(ConfigListener::class)->willReturn($configListener);
+
+        $moduleManager = $moduleManager->reveal();
+
+        $callback = function () use ($moduleManager) : ModuleManager {
+            return $moduleManager;
+        };
+
+        $delegator = new AttachEventsToModuleManagerDelegator();
+        $this->assertSame($moduleManager, $delegator($container->reveal(), 'bar', $callback));
+    }
+
+    /**
+     * @test
+     */
+    public function willCreateConfigListenerFromFactoryIfUsedInApplicationConfiguration() : void
+    {
+        $events    = $this->prophesize(EventManagerInterface::class)->reveal();
+        $converter = $this->prophesize(ConverterInterface::class)->reveal();
 
         $moduleManager = $this->prophesize(ModuleManager::class);
         $moduleManager->getEventManager()->willReturn($events);
 
         $container = $this->prophesize(ContainerInterface::class);
-        $container->get(ConfigListener::class)->willReturn($configListener);
+        $container->has(ConfigListener::class)->willReturn(false);
+        $container->get(ConverterInterface::class)->willReturn($converter);
 
         $moduleManager = $moduleManager->reveal();
 

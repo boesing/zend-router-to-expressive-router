@@ -27,9 +27,19 @@ final class AttachEventsToModuleManagerDelegator implements DelegatorFactoryInte
         }
 
         $eventManager   = $moduleManager->getEventManager();
-        $configListener = $container->get(ConfigListener::class);
+        $configListener = $this->configListener($container);
         $configListener->attach($eventManager);
 
         return $moduleManager;
+    }
+
+    private function configListener(ContainerInterface $container) : ConfigListener
+    {
+        // As this delegator is being used before any module is initialized, we have to use the factory directly
+        if ($container->has(ConfigListener::class)) {
+            return $container->get(ConfigListener::class);
+        }
+
+        return (new ConfigListenerFactory())($container, ConfigListener::class);
     }
 }
