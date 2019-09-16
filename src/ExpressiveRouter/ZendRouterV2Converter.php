@@ -5,13 +5,8 @@ declare(strict_types=1);
 namespace Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter;
 
 use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ZendRouterV2Converter\ConfigurationInterface;
-use function preg_quote;
-use function preg_replace;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use Zend\Expressive\Router\Route;
+use Zend\Expressive\Router\RouteResult;
 use Zend\Router\Http\Hostname;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Method;
@@ -21,11 +16,16 @@ use Zend\Router\RoutePluginManager;
 use function array_keys;
 use function array_merge;
 use function array_values;
+use function count;
 use function in_array;
 use function preg_match;
 use function preg_match_all;
+use function preg_quote;
+use function preg_replace;
+use function preg_split;
+use function rtrim;
 use function sprintf;
-use function str_replace;
+use function strlen;
 
 final class ZendRouterV2Converter implements ConverterInterface
 {
@@ -169,14 +169,7 @@ REGEX;
 
         $route = new Route(
             $this->convertRouteAndHandleParameters($metadata),
-            new class() implements MiddlewareInterface {
-                public function process(
-                    ServerRequestInterface $request,
-                    RequestHandlerInterface $handler
-                ) : ResponseInterface {
-                    return $handler->handle($request);
-                }
-            },
+            RouteResult::fromRouteFailure([]),
             $requestMethods,
             $metadata->name()
         );
@@ -198,8 +191,8 @@ REGEX;
 
         $searchAndReplace = [];
         foreach ($parameters[1] as $parameter) {
-            $parameterValue = sprintf('%s:%s', $parameter, $metadata->constraint($parameter));
-            $searchValue = sprintf('#:\b%s\b#', preg_quote($parameter, '#'));
+            $parameterValue                 = sprintf('%s:%s', $parameter, $metadata->constraint($parameter));
+            $searchValue                    = sprintf('#:\b%s\b#', preg_quote($parameter, '#'));
             $searchAndReplace[$searchValue] = sprintf('{%s}', $parameterValue);
         }
 
@@ -214,7 +207,7 @@ REGEX;
         $path = $metadata->path();
 
         $routeWithoutClosingOptionals = rtrim($path, ']');
-        $numOptionals = strlen($path) - strlen($routeWithoutClosingOptionals);
+        $numOptionals                 = strlen($path) - strlen($routeWithoutClosingOptionals);
 
         // Split on [ while skipping placeholders
         $segments = preg_split('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \[~x', $routeWithoutClosingOptionals);

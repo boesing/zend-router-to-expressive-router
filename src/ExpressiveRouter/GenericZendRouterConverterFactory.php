@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter;
@@ -11,10 +12,7 @@ use Zend\ServiceManager\Factory\FactoryInterface;
 
 final class GenericZendRouterConverterFactory implements FactoryInterface
 {
-
-    /**
-     * @var array
-     */
+    /** @var array */
     private $config;
 
     public function __construct(array $config)
@@ -25,7 +23,7 @@ final class GenericZendRouterConverterFactory implements FactoryInterface
     /**
      * @inheritDoc
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $routePluginManagerFactory = new GenericRoutePluginManagerFactory();
 

@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter;
 
-use function array_key_exists;
-use function array_replace;
-use function explode;
 use Webmozart\Assert\Assert;
 use Zend\Router\Http\RouteInterface;
 use Zend\Router\RoutePluginManager;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
+use function array_key_exists;
 use function array_keys;
+use function array_map;
+use function array_replace;
 use function array_replace_recursive;
+use function explode;
+use function preg_match;
 use function sprintf;
 use function strtoupper;
 use function usort;
@@ -53,11 +55,11 @@ final class RouteMetadata
 
     private function __construct(string $name, string $type, array $requestMethods, string $path, bool $terminates)
     {
-        $this->name          = $name;
-        $this->type          = $type;
+        $this->name           = $name;
+        $this->type           = $type;
         $this->requestMethods = $requestMethods;
-        $this->path          = $path;
-        $this->terminates    = $terminates;
+        $this->path           = $path;
+        $this->terminates     = $terminates;
     }
 
     /**
@@ -96,8 +98,8 @@ final class RouteMetadata
 
         $type = $config['type'] ?? '';
         Assert::notEmpty($type, sprintf('Route type is required for route %s', $name));
-        $terminates    = $config['may_terminate'] ?? true;
-        $verb = strtoupper($options['verb'] ?? '');
+        $terminates = $config['may_terminate'] ?? true;
+        $verb       = strtoupper($options['verb'] ?? '');
 
         $requestMethods = [];
         if ($verb) {
@@ -136,7 +138,7 @@ final class RouteMetadata
         }
     }
 
-    private function constraints(): array
+    private function constraints() : array
     {
         $constraintsFromParents = $this->parent ? $this->parent->constraints() : [];
         return array_replace($constraintsFromParents, $this->constraints);
@@ -204,7 +206,7 @@ final class RouteMetadata
         return $priority;
     }
 
-    public function constraint(string $parameter): string
+    public function constraint(string $parameter) : string
     {
         $constraints = $this->constraints();
         if (array_key_exists($parameter, $constraints)) {
