@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter;
 
+use function array_key_exists;
+use function array_replace;
 use function explode;
 use Webmozart\Assert\Assert;
 use Zend\Router\Http\RouteInterface;
@@ -26,7 +28,7 @@ final class RouteMetadata
     public $requestMethods;
 
     /** @var array<string,string> */
-    public $constraints = [];
+    private $constraints = [];
 
     /** @var string */
     public $type;
@@ -134,6 +136,12 @@ final class RouteMetadata
         }
     }
 
+    private function constraints(): array
+    {
+        $constraintsFromParents = $this->parent ? $this->parent->constraints() : [];
+        return array_replace($constraintsFromParents, $this->constraints);
+    }
+
     public function name() : string
     {
         if ($this->parent) {
@@ -194,5 +202,22 @@ final class RouteMetadata
         }
 
         return $priority;
+    }
+
+    public function constraint(string $parameter): string
+    {
+        $constraints = $this->constraints();
+        if (array_key_exists($parameter, $constraints)) {
+            return $constraints[$parameter];
+        }
+
+        $path   = $this->path();
+        $search = sprintf('#:%s$#', $parameter);
+
+        if (preg_match($search, $path)) {
+            return '.+';
+        }
+
+        return '[^\/]+';
     }
 }
