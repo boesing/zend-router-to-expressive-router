@@ -19,7 +19,7 @@ final class Module implements ServiceProviderInterface, ConfigProviderInterface
     public function getConfig()
     {
         return [
-            'listener' => [
+            'listeners' => [
                 RouteListener::class,
             ],
         ];
