@@ -13,6 +13,14 @@ use function sprintf;
 
 final class AttachEventsToModuleManagerDelegator implements DelegatorFactoryInterface
 {
+    /** @var ConfigListener */
+    private $listener;
+
+    public function __construct(ConfigListener $listener)
+    {
+        $this->listener = $listener;
+    }
+
     /**
      * @inheritDoc
      */
@@ -26,20 +34,9 @@ final class AttachEventsToModuleManagerDelegator implements DelegatorFactoryInte
             ));
         }
 
-        $eventManager   = $moduleManager->getEventManager();
-        $configListener = $this->configListener($container);
-        $configListener->attach($eventManager);
+        $eventManager = $moduleManager->getEventManager();
+        $this->listener->attach($eventManager);
 
         return $moduleManager;
-    }
-
-    private function configListener(ContainerInterface $container) : ConfigListener
-    {
-        // As this delegator is being used before any module is initialized, we have to use the factory directly
-        if ($container->has(ConfigListener::class)) {
-            return $container->get(ConfigListener::class);
-        }
-
-        return (new ConfigListenerFactory())($container, ConfigListener::class);
     }
 }
