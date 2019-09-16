@@ -5,11 +5,6 @@ declare(strict_types=1);
 namespace Boesing\ZendRouterToExpressiveRouter;
 
 use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\AttachRoutesToRouterDelegator;
-use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ConverterInterface;
-use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ZendRouterV2Converter;
-use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ZendRouterV2ConverterFactory;
-use Boesing\ZendRouterToExpressiveRouter\ModuleManager\ConfigListener;
-use Boesing\ZendRouterToExpressiveRouter\ModuleManager\ConfigListenerFactory;
 use Boesing\ZendRouterToExpressiveRouter\Mvc\RouteListener;
 use Boesing\ZendRouterToExpressiveRouter\Mvc\RouteListenerFactory;
 use Zend\Expressive\Router\RouterInterface;
@@ -36,14 +31,8 @@ final class Module implements ServiceProviderInterface, ConfigProviderInterface
     public function getServiceConfig()
     {
         return [
-            'aliases'    => [
-                ConverterInterface::class => ZendRouterV2Converter::class,
-            ],
             'factories'  => [
-                ConfigListener::class                      => ConfigListenerFactory::class,
-                RouteListener::class                       => RouteListenerFactory::class,
-                ZendRouterV2Converter::class               => ZendRouterV2ConverterFactory::class,
-                ZendRouterV2Converter\Configuration::class => ZendRouterV2Converter\ConfigurationFactory::class,
+                RouteListener::class => RouteListenerFactory::class,
             ],
             'delegators' => [
                 RouterInterface::class => [

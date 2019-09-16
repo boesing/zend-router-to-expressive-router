@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter;
 
 use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ZendRouterV2Converter\ConfigurationInterface;
-use Boesing\ZendRouterToExpressiveRouter\Middleware\DummyMiddleware;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Zend\Expressive\Router\Route;
 use Zend\Router\Http\Hostname;
 use Zend\Router\Http\Literal;
@@ -22,7 +25,7 @@ use function preg_match_all;
 use function sprintf;
 use function str_replace;
 
-class ZendRouterV2Converter implements ConverterInterface
+final class ZendRouterV2Converter implements ConverterInterface
 {
     public const ANY_REQUEST_METHOD = null;
 
@@ -154,7 +157,14 @@ class ZendRouterV2Converter implements ConverterInterface
 
         $route = new Route(
             $this->convertRouteAndHandleParameters($metadata),
-            new DummyMiddleware(),
+            new class() implements MiddlewareInterface {
+                public function process(
+                    ServerRequestInterface $request,
+                    RequestHandlerInterface $handler
+                ) : ResponseInterface {
+                    return $handler->handle($request);
+                }
+            },
             $requestMethods,
             $metadata->name()
         );
@@ -184,13 +194,13 @@ class ZendRouterV2Converter implements ConverterInterface
         return str_replace(array_keys($searchAndReplace), array_values($searchAndReplace), $path);
     }
 
-    private function detectParmeterConstraint(RouteMetadata $metadata, $parameter): string
+    private function detectParmeterConstraint(RouteMetadata $metadata, $parameter) : string
     {
         if (isset($metadata->constraints[$parameter])) {
             return $metadata->constraints[$parameter];
         }
 
-        $path = $metadata->path();
+        $path   = $metadata->path();
         $search = sprintf('#:%s$#', $parameter);
 
         if (preg_match($search, $path)) {

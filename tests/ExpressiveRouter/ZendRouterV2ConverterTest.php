@@ -234,7 +234,7 @@ final class ZendRouterV2ConverterTest extends TestCase
     public function convertableRoutesProvider() : array
     {
         return [
-            'simple'                         => [
+            'simple'                           => [
                 [
                     'foo' => [
                         'type'    => 'literal',
@@ -254,7 +254,7 @@ final class ZendRouterV2ConverterTest extends TestCase
                     ],
                 ],
             ],
-            'simple hostname'                => [
+            'simple hostname'                  => [
                 [
                     'hostname' => [
                         'type'    => 'hostname',
@@ -276,7 +276,7 @@ final class ZendRouterV2ConverterTest extends TestCase
                     ],
                 ],
             ],
-            'hostname_with_children'         => [
+            'hostname_with_children'           => [
                 [
                     'hostname' => [
                         'type'          => 'hostname',
@@ -307,7 +307,7 @@ final class ZendRouterV2ConverterTest extends TestCase
                     ],
                 ],
             ],
-            'segment'                        => [
+            'segment'                          => [
                 [
                     'segment' => [
                         'type'    => 'segment',
@@ -335,7 +335,7 @@ final class ZendRouterV2ConverterTest extends TestCase
                     ],
                 ],
             ],
-            'method specific REST endpoints' => [
+            'method specific REST endpoints'   => [
                 [
                     'rest' => [
                         'type'          => 'segment',
@@ -464,22 +464,22 @@ final class ZendRouterV2ConverterTest extends TestCase
             ],
             'segment with multiple parameters' => [
                 [
-                    'segment' => [
+                    'segment'                            => [
                         'type'    => 'segment',
                         'options' => [
-                            'route'       => '/foo/:bar/baz/:qoo',
+                            'route' => '/foo/:bar/baz/:qoo',
                         ],
                     ],
-                    'segment with ending slash' => [
+                    'segment with ending slash'          => [
                         'type'    => 'segment',
                         'options' => [
-                            'route'       => '/foo/:bar/baz/:qoo/',
+                            'route' => '/foo/:bar/baz/:qoo/',
                         ],
                     ],
                     'segment with optional ending slash' => [
                         'type'    => 'segment',
                         'options' => [
-                            'route'       => '/foo/:bar/baz/:qoo[/]',
+                            'route' => '/foo/:bar/baz/:qoo[/]',
                         ],
                     ],
                 ],
@@ -510,7 +510,7 @@ final class ZendRouterV2ConverterTest extends TestCase
                     ],
                 ],
             ],
-            'routes with priorities' => [
+            'routes with priorities'           => [
                 [
                     'foo' => [
                         'type'    => 'literal',
@@ -519,8 +519,8 @@ final class ZendRouterV2ConverterTest extends TestCase
                         ],
                     ],
                     'bar' => [
-                        'type'    => 'literal',
-                        'options' => [
+                        'type'     => 'literal',
+                        'options'  => [
                             'route' => '/foo',
                         ],
                         'priority' => 2,
