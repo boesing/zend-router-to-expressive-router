@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter;
 
+use function explode;
 use Webmozart\Assert\Assert;
 use Zend\Router\Http\RouteInterface;
 use Zend\Router\RoutePluginManager;
@@ -94,7 +95,12 @@ final class RouteMetadata
         $type = $config['type'] ?? '';
         Assert::notEmpty($type, sprintf('Route type is required for route %s', $name));
         $terminates    = $config['may_terminate'] ?? true;
-        $requestMethods = explode(',', strtoupper($options['verb'] ?? ''));
+        $verb = strtoupper($options['verb'] ?? '');
+
+        $requestMethods = [];
+        if ($verb) {
+            $requestMethods = array_map('trim', explode(',', $verb));
+        }
 
         $instance = new self($name, $type, $requestMethods, $route, $terminates);
 
