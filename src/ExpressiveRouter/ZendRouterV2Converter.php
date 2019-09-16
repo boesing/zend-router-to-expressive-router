@@ -161,8 +161,8 @@ REGEX;
     private function metadataToExpressiveRouterRoute(RouteMetadata $metadata) : Route
     {
         $requestMethods = Route::HTTP_METHOD_ANY;
-        if ($metadata->requestMethod) {
-            $requestMethods = [$metadata->requestMethod];
+        if ($metadata->requestMethods) {
+            $requestMethods = $metadata->requestMethods;
         }
 
         $route = new Route(

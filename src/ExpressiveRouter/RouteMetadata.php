@@ -21,8 +21,8 @@ final class RouteMetadata
     /** @var string */
     public $path;
 
-    /** @var string */
-    public $requestMethod;
+    /** @var array<int,string> */
+    public $requestMethods;
 
     /** @var array<string,string> */
     public $constraints = [];
@@ -48,11 +48,11 @@ final class RouteMetadata
     /** @var int|null */
     private $priority;
 
-    private function __construct(string $name, string $type, string $requestMethod, string $path, bool $terminates)
+    private function __construct(string $name, string $type, array $requestMethods, string $path, bool $terminates)
     {
         $this->name          = $name;
         $this->type          = $type;
-        $this->requestMethod = $requestMethod;
+        $this->requestMethods = $requestMethods;
         $this->path          = $path;
         $this->terminates    = $terminates;
     }
@@ -94,9 +94,9 @@ final class RouteMetadata
         $type = $config['type'] ?? '';
         Assert::notEmpty($type, sprintf('Route type is required for route %s', $name));
         $terminates    = $config['may_terminate'] ?? true;
-        $requestMethod = strtoupper($options['verb'] ?? '');
+        $requestMethods = explode(',', strtoupper($options['verb'] ?? ''));
 
-        $instance = new self($name, $type, $requestMethod, $route, $terminates);
+        $instance = new self($name, $type, $requestMethods, $route, $terminates);
 
         $instance->defaults    = $options['defaults'] ?? [];
         $instance->constraints = $options['constraints'] ?? [];
