@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter;
 
+use function usort;
 use Webmozart\Assert\Assert;
 use Zend\Router\Http\RouteInterface;
 use Zend\Router\RoutePluginManager;
@@ -44,6 +45,11 @@ final class RouteMetadata
     /** @var RouteMetadata|null */
     private $parent;
 
+    /**
+     * @var int|null
+     */
+    private $priority;
+
     private function __construct(string $name, string $type, string $requestMethod, string $path, bool $terminates)
     {
         $this->name          = $name;
@@ -73,6 +79,10 @@ final class RouteMetadata
             $metadatas[] = $metadata;
         }
 
+        usort($metadatas, function (RouteMetadata $left, RouteMetadata $right): int {
+            return $right->priority() <=> $left->priority();
+        });
+
         return $metadatas;
     }
 
@@ -92,6 +102,7 @@ final class RouteMetadata
 
         $instance->defaults    = $options['defaults'] ?? [];
         $instance->constraints = $options['constraints'] ?? [];
+        $instance->priority = $config['priority'] ?? null;
 
         return $instance->withChildren($config['child_routes'] ?? []);
     }
@@ -165,5 +176,19 @@ final class RouteMetadata
         }
 
         return $this->defaults;
+    }
+
+    public function priority(): int
+    {
+        $priority = $this->priority;
+        if ($priority === null) {
+            if ($this->parent) {
+                return $this->parent->priority();
+            }
+
+            return 0;
+        }
+
+        return $priority;
     }
 }

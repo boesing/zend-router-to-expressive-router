@@ -174,18 +174,29 @@ class ZendRouterV2Converter implements ConverterInterface
             return $path;
         }
 
-        $constraints = $metadata->constraints;
-
         $searchAndReplace = [];
         foreach ($parameters[1] as $parameter) {
-            $parameterValue = $parameter;
-            if (isset($constraints[$parameter])) {
-                $parameterValue = sprintf('%s:%s', $parameter, $constraints[$parameter]);
-            }
+            $parameterValue = sprintf('%s:%s', $parameter, $this->detectParmeterConstraint($metadata, $parameter));
 
             $searchAndReplace[':' . $parameter] = sprintf('{%s}', $parameterValue);
         }
 
         return str_replace(array_keys($searchAndReplace), array_values($searchAndReplace), $path);
+    }
+
+    private function detectParmeterConstraint(RouteMetadata $metadata, $parameter): string
+    {
+        if (isset($metadata->constraints[$parameter])) {
+            return $metadata->constraints[$parameter];
+        }
+
+        $path = $metadata->path();
+        $search = sprintf('#:%s$#', $parameter);
+
+        if (preg_match($search, $path)) {
+            return '.+';
+        }
+
+        return '[^\/]+';
     }
 }

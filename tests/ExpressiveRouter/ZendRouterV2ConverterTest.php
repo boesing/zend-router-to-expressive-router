@@ -429,7 +429,7 @@ final class ZendRouterV2ConverterTest extends TestCase
                     ],
                     [
                         'name'            => 'rest/entity/show',
-                        'path'            => '/foo/{id}',
+                        'path'            => '/foo/{id:.+}',
                         'options'         => [
                             'defaults' => [
                                 'controller' => 'Foo',
@@ -440,7 +440,7 @@ final class ZendRouterV2ConverterTest extends TestCase
                     ],
                     [
                         'name'            => 'rest/entity/delete',
-                        'path'            => '/foo/{id}',
+                        'path'            => '/foo/{id:.+}',
                         'options'         => [
                             'defaults' => [
                                 'controller' => 'Foo',
@@ -451,7 +451,7 @@ final class ZendRouterV2ConverterTest extends TestCase
                     ],
                     [
                         'name'            => 'rest/entity/update',
-                        'path'            => '/foo/{id}',
+                        'path'            => '/foo/{id:.+}',
                         'options'         => [
                             'defaults' => [
                                 'controller' => 'Foo',
@@ -459,6 +459,89 @@ final class ZendRouterV2ConverterTest extends TestCase
                             ],
                         ],
                         'allowed_methods' => ['PATCH'],
+                    ],
+                ],
+            ],
+            'segment with multiple parameters' => [
+                [
+                    'segment' => [
+                        'type'    => 'segment',
+                        'options' => [
+                            'route'       => '/foo/:bar/baz/:qoo',
+                        ],
+                    ],
+                    'segment with ending slash' => [
+                        'type'    => 'segment',
+                        'options' => [
+                            'route'       => '/foo/:bar/baz/:qoo/',
+                        ],
+                    ],
+                    'segment with optional ending slash' => [
+                        'type'    => 'segment',
+                        'options' => [
+                            'route'       => '/foo/:bar/baz/:qoo[/]',
+                        ],
+                    ],
+                ],
+                [
+                    [
+                        'name'            => 'segment',
+                        'path'            => '/foo/{bar:[^\/]+}/baz/{qoo:.+}',
+                        'options'         => [
+                            'defaults' => [],
+                        ],
+                        'allowed_methods' => ZendRouterV2Converter::ANY_REQUEST_METHOD,
+                    ],
+                    [
+                        'name'            => 'segment with ending slash',
+                        'path'            => '/foo/{bar:[^\/]+}/baz/{qoo:[^\/]+}/',
+                        'options'         => [
+                            'defaults' => [],
+                        ],
+                        'allowed_methods' => ZendRouterV2Converter::ANY_REQUEST_METHOD,
+                    ],
+                    [
+                        'name'            => 'segment with optional ending slash',
+                        'path'            => '/foo/{bar:[^\/]+}/baz/{qoo:[^\/]+}[/]',
+                        'options'         => [
+                            'defaults' => [],
+                        ],
+                        'allowed_methods' => ZendRouterV2Converter::ANY_REQUEST_METHOD,
+                    ],
+                ],
+            ],
+            'routes with priorities' => [
+                [
+                    'foo' => [
+                        'type'    => 'literal',
+                        'options' => [
+                            'route' => '/foo',
+                        ],
+                    ],
+                    'bar' => [
+                        'type'    => 'literal',
+                        'options' => [
+                            'route' => '/foo',
+                        ],
+                        'priority' => 2,
+                    ],
+                ],
+                [
+                    [
+                        'name'            => 'bar',
+                        'path'            => '/foo',
+                        'options'         => [
+                            'defaults' => [],
+                        ],
+                        'allowed_methods' => ZendRouterV2Converter::ANY_REQUEST_METHOD,
+                    ],
+                    [
+                        'name'            => 'foo',
+                        'path'            => '/foo',
+                        'options'         => [
+                            'defaults' => [],
+                        ],
+                        'allowed_methods' => ZendRouterV2Converter::ANY_REQUEST_METHOD,
                     ],
                 ],
             ],
