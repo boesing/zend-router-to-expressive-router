@@ -29,6 +29,16 @@ final class ZendRouterV2Converter implements ConverterInterface
 {
     public const ANY_REQUEST_METHOD = null;
 
+    /** @see https://github.com/nikic/FastRoute/blob/89aca17bc275eeb2418eecf8301b372f1e772b22/src/RouteParser/Std.php#L26 */
+    private const VARIABLE_REGEX = <<<'REGEX'
+\{
+    \s* ([a-zA-Z_][a-zA-Z0-9_-]*) \s*
+    (?:
+        : \s* ([^{}]*(?:\{(?-1)\}[^{}]*)*)
+    )?
+\}
+REGEX;
+
     /** @var ConfigurationInterface */
     private $configuration;
 
@@ -73,6 +83,13 @@ final class ZendRouterV2Converter implements ConverterInterface
                 throw InvalidRouteConfigurationException::fromUnsupportedRouteType($metadata->name(), $metadata->type);
             }
 
+            if ($this->containsUnsupportedOptionalRouteParts($metadata)) {
+                throw InvalidRouteConfigurationException::fromUnsupportedOptionalRoutePart(
+                    $metadata->name(),
+                    $metadata->path()
+                );
+            }
+
             $metadata = $this->pluginSpecificInformations($metadata);
 
             if (! $metadata->children) {
@@ -82,13 +99,6 @@ final class ZendRouterV2Converter implements ConverterInterface
 
                 $flattened[] = $metadata;
                 continue;
-            }
-
-            if (preg_match('#[\]\[]#', $metadata->path)) {
-                throw InvalidRouteConfigurationException::fromUnsupportedOptionalRoutePart(
-                    $metadata->name(),
-                    $metadata->path
-                );
             }
 
             if ($metadata->terminates) {
@@ -208,5 +218,35 @@ final class ZendRouterV2Converter implements ConverterInterface
         }
 
         return '[^\/]+';
+    }
+
+    /**
+     * This method is inspired by the std routeparser of nikitas fastroute router.
+     */
+    private function containsUnsupportedOptionalRouteParts(RouteMetadata $metadata)
+    {
+        $path = $metadata->path();
+
+        $routeWithoutClosingOptionals = rtrim($path, ']');
+        $numOptionals = strlen($path) - strlen($routeWithoutClosingOptionals);
+
+        // Split on [ while skipping placeholders
+        $segments = preg_split('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \[~x', $routeWithoutClosingOptionals);
+        if ($numOptionals !== count($segments) - 1) {
+            // If there are any ] in the middle of the route, throw a more specific error message
+            if (preg_match('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \]~x', $routeWithoutClosingOptionals)) {
+                return true;
+            }
+
+            return true;
+        }
+
+        foreach ($segments as $n => $segment) {
+            if ($segment === '' && $n !== 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
