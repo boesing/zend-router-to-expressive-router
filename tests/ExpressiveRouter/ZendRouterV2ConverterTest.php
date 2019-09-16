@@ -533,6 +533,26 @@ final class ZendRouterV2ConverterTest extends TestCase
                     ],
                 ],
             ],
+            'routes with parameter name quite identical' => [
+                [
+                    'foo' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/foo/:bar/:bar_id',
+                        ],
+                    ],
+                ],
+                [
+                    [
+                        'name' => 'foo',
+                        'path' => '/foo/{bar:[^\/]+}/{bar_id:.+}',
+                        'options' => [
+                            'defaults' => [],
+                        ],
+                        'allowed_methods' => ZendRouterV2Converter::ANY_REQUEST_METHOD,
+                    ]
+                ]
+            ],
         ];
     }
 

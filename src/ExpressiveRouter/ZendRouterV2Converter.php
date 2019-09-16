@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter;
 
 use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ZendRouterV2Converter\ConfigurationInterface;
+use function preg_quote;
+use function preg_replace;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -197,11 +199,11 @@ REGEX;
         $searchAndReplace = [];
         foreach ($parameters[1] as $parameter) {
             $parameterValue = sprintf('%s:%s', $parameter, $this->detectParmeterConstraint($metadata, $parameter));
-
-            $searchAndReplace[':' . $parameter] = sprintf('{%s}', $parameterValue);
+            $searchValue = sprintf('#:\b%s\b#', preg_quote($parameter, '#'));
+            $searchAndReplace[$searchValue] = sprintf('{%s}', $parameterValue);
         }
 
-        return str_replace(array_keys($searchAndReplace), array_values($searchAndReplace), $path);
+        return preg_replace(array_keys($searchAndReplace), array_values($searchAndReplace), $path);
     }
 
     private function detectParmeterConstraint(RouteMetadata $metadata, $parameter) : string
