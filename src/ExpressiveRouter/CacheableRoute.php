@@ -10,6 +10,9 @@ final class CacheableRoute extends Route
 
     public static function __set_state(array $properties): Route
     {
-        return new Route($properties['path'], $properties['middleware'], $properties['methods'], $properties['name']);
+        $route = new Route($properties['path'], $properties['middleware'], $properties['methods'], $properties['name']);
+        $route->setOptions($properties['options']);
+
+        return $route;
     }
 }
