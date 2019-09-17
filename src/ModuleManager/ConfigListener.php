@@ -51,7 +51,7 @@ final class ConfigListener extends AbstractListenerAggregate
         $config                         = $configListener->getMergedConfig(false);
         $routes                         = $config['router']['routes'] ?? [];
         $convertedRoutes                = $this->converter->convert($routes);
-        $config[RouterInterface::class] = $convertedRoutes;
+        $config['routes'] = $convertedRoutes;
         $configListener->setMergedConfig($config);
     }
 

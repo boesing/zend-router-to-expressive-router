@@ -112,7 +112,7 @@ final class ConfigListenerTest extends TestCase
             ->willReturn($config);
 
         $converted = ['bar' => 'foo'];
-        $merged    = $config + [RouterInterface::class => $converted];
+        $merged    = $config + ['routes' => $converted];
 
         $listener
             ->setMergedConfig($merged)
@@ -164,7 +164,7 @@ final class ConfigListenerTest extends TestCase
             ->willReturn($config);
 
         $converted = ['bar' => 'foo'];
-        $merged    = $config + [RouterInterface::class => $converted];
+        $merged    = $config + ['routes' => $converted];
 
         $listener
             ->setMergedConfig($merged)
@@ -200,7 +200,7 @@ final class ConfigListenerTest extends TestCase
             ->willReturn($config);
 
         $converted = ['bar' => 'foo'];
-        $merged    = $config + [RouterInterface::class => $converted];
+        $merged    = $config + ['routes' => $converted];
 
         $listener
             ->setMergedConfig($merged)
