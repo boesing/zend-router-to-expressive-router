@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter;
 
 use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ZendRouterV2Converter\ConfigurationInterface;
+use Boesing\ZendRouterToExpressiveRouter\Middleware\DummyMiddleware;
 use Zend\Expressive\Router\Route;
 use Zend\Expressive\Router\RouteResult;
 use Zend\Router\Http\Hostname;
@@ -167,9 +168,9 @@ REGEX;
             $requestMethods = $metadata->requestMethods;
         }
 
-        $route = new Route(
+        $route = new CacheableRoute(
             $this->convertRouteAndHandleParameters($metadata),
-            RouteResult::fromRouteFailure([]),
+            new DummyMiddleware(),
             $requestMethods,
             $metadata->name()
         );
