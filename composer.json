@@ -11,13 +11,21 @@
     ],
     "require": {
         "php": "^7.3",
+        "container-interop/container-interop": "^1.2",
         "fig/http-message-util": "^1.1",
+        "psr/http-message": "^1.0",
+        "psr/http-server-handler": "^1.0",
+        "psr/http-server-middleware": "^1.0",
+        "webmozart/assert": "^1.5",
         "zendframework/zend-eventmanager": "^3.2",
         "zendframework/zend-expressive-router": "^3.1",
+        "zendframework/zend-http": "^2.10",
         "zendframework/zend-modulemanager": "^2.8",
         "zendframework/zend-mvc": "^3.1",
         "zendframework/zend-psr7bridge": "^1.2",
-        "zendframework/zend-router": "^3.3"
+        "zendframework/zend-router": "^3.3",
+        "zendframework/zend-servicemanager": "^3.4",
+        "zendframework/zend-stdlib": "^3.2"
     },
     "require-dev": {
         "jangregor/phpstan-prophecy": "^0.4.2",
@@ -53,7 +61,8 @@
     "scripts": {
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
-        "analyze": "phpstan analyze --no-progress"
+        "analyze": "phpstan analyze --no-progress",
+        "crc": "composer-require-checker check"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
