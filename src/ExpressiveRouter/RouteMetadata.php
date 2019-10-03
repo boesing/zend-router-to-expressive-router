@@ -141,7 +141,7 @@ final class RouteMetadata
             return [];
         }
 
-        return array_combine($matches['names'], $matches['constraints']);
+        return (array) array_combine($matches['names'] ?? [], $matches['constraints'] ?? []);
     }
 
     private static function convertRegexToSegmentRoute(string $regex, array $constraints) : string
@@ -161,6 +161,8 @@ final class RouteMetadata
             },
             $replaced
         );
+
+        Assert::string($replaced);
 
         if (strpos($replaced, '?') !== false) {
             throw InvalidRouteConfigurationException::fromUnsupportedRegexRoute($regex);
@@ -266,7 +268,7 @@ final class RouteMetadata
     {
         $constraintsFromParents = $this->parent ? $this->parent->constraints() : [];
 
-        return array_replace($constraintsFromParents, $this->constraints);
+        return (array) array_replace($constraintsFromParents, $this->constraints);
     }
 
     public function path(bool $calledFromChildRoute = false) : string

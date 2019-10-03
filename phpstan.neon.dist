@@ -1,7 +1,7 @@
 parameters:
   level: max
   ignoreErrors:
-    - '/^Parameter #3 \$methods of class Zend\\Expressive\\Router\\Route constructor expects array/'
+    - '/^Parameter #3 \$methods of class Boesing\\ZendRouterToExpressiveRouter\\ExpressiveRouter\\CacheableRoute constructor expects array/'
   reportUnmatchedIgnoredErrors: true
   fileExtensions:
     - php

@@ -203,7 +203,7 @@ REGEX;
             $searchAndReplace[$searchValue] = sprintf('{%s}', $parameterValue);
         }
 
-        return preg_replace(array_keys($searchAndReplace), array_values($searchAndReplace), $path);
+        return (string) preg_replace(array_keys($searchAndReplace), array_values($searchAndReplace), $path);
     }
 
     /**
@@ -217,7 +217,7 @@ REGEX;
         $numOptionals                 = strlen($path) - strlen($routeWithoutClosingOptionals);
 
         // Split on [ while skipping placeholders
-        $segments = preg_split('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \[~x', $routeWithoutClosingOptionals);
+        $segments = (array) preg_split('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \[~x', $routeWithoutClosingOptionals);
         if ($numOptionals !== count($segments) - 1) {
             // If there are any ] in the middle of the route, throw a more specific error message
             if (preg_match('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \]~x', $routeWithoutClosingOptionals)) {
