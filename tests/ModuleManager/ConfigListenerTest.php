@@ -10,7 +10,6 @@ use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamFile;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
-use Zend\Expressive\Router\RouterInterface;
 use Zend\ModuleManager\Listener\AbstractListener;
 use Zend\ModuleManager\Listener\ConfigMergerInterface;
 use Zend\ModuleManager\Listener\ListenerOptions;

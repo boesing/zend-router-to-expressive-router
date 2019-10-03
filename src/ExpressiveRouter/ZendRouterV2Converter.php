@@ -7,10 +7,10 @@ namespace Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter;
 use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ZendRouterV2Converter\ConfigurationInterface;
 use Boesing\ZendRouterToExpressiveRouter\Middleware\DummyMiddleware;
 use Zend\Expressive\Router\Route;
-use Zend\Expressive\Router\RouteResult;
 use Zend\Router\Http\Hostname;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Method;
+use Zend\Router\Http\Regex;
 use Zend\Router\Http\Segment;
 use Zend\Router\RoutePluginManager;
 
@@ -139,6 +139,10 @@ REGEX;
             return true;
         }
 
+        if ($plugin instanceof Regex) {
+            return true;
+        }
+
         return false;
     }
 
@@ -184,14 +188,16 @@ REGEX;
     {
         $path = $metadata->path();
 
-        $parameters = [];
-        preg_match_all('#:(\w+)#', $path, $parameters);
-        if (empty($parameters[0])) {
+        $matches = [];
+        preg_match_all('#:(?<parameters>\w+)#', $path, $matches);
+        $parameters = $matches['parameters'] ?? [];
+
+        if (empty($parameters)) {
             return $path;
         }
 
         $searchAndReplace = [];
-        foreach ($parameters[1] as $parameter) {
+        foreach ($parameters as $parameter) {
             $parameterValue                 = sprintf('%s:%s', $parameter, $metadata->constraint($parameter));
             $searchValue                    = sprintf('#:\b%s\b#', preg_quote($parameter, '#'));
             $searchAndReplace[$searchValue] = sprintf('{%s}', $parameterValue);

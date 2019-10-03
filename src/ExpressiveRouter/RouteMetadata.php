@@ -10,6 +10,7 @@ use Zend\Router\RoutePluginManager;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
+use function array_combine;
 use function array_key_exists;
 use function array_keys;
 use function array_map;
@@ -17,8 +18,16 @@ use function array_replace;
 use function array_replace_recursive;
 use function explode;
 use function preg_match;
+use function preg_match_all;
+use function preg_replace;
+use function preg_replace_callback;
 use function sprintf;
+use function str_replace;
+use function stripslashes;
+use function strpos;
 use function strtoupper;
+use function substr;
+use function trim;
 use function usort;
 
 final class RouteMetadata
@@ -29,9 +38,6 @@ final class RouteMetadata
     /** @var array<int,string> */
     public $requestMethods;
 
-    /** @var array<string,string> */
-    private $constraints = [];
-
     /** @var string */
     public $type;
 
@@ -40,6 +46,9 @@ final class RouteMetadata
 
     /** @var bool */
     public $terminates;
+
+    /** @var array<string,string> */
+    private $constraints = [];
 
     /** @var array<string,mixed> */
     private $defaults = [];
@@ -100,6 +109,13 @@ final class RouteMetadata
         Assert::notEmpty($type, sprintf('Route type is required for route %s', $name));
         $terminates = $config['may_terminate'] ?? true;
         $verb       = strtoupper($options['verb'] ?? '');
+        $regex      = $options['regex'] ?? '';
+
+        $constraints = $options['constraints'] ?? [];
+        if ($regex) {
+            $constraints = self::extractConstraintsFromRegexDefinition($regex);
+            $route       = self::convertRegexToSegmentRoute($regex, $constraints);
+        }
 
         $requestMethods = [];
         if ($verb) {
@@ -108,11 +124,49 @@ final class RouteMetadata
 
         $instance = new self($name, $type, $requestMethods, $route, $terminates);
 
+        // Remove capturing groups from constraints
+        $instance->constraints = array_map(function (string $constraint) : string {
+            return trim($constraint, '()');
+        }, $constraints);
         $instance->defaults    = $options['defaults'] ?? [];
-        $instance->constraints = $options['constraints'] ?? [];
         $instance->priority    = $config['priority'] ?? null;
 
         return $instance->withChildren($config['child_routes'] ?? []);
+    }
+
+    private static function extractConstraintsFromRegexDefinition(string $regex) : array
+    {
+        $matches = [];
+        if (! preg_match_all('#\(\?<(?<names>.*?)>(?<constraints>.*?\)?)\)#', $regex, $matches)) {
+            return [];
+        }
+
+        return array_combine($matches['names'], $matches['constraints']);
+    }
+
+    private static function convertRegexToSegmentRoute(string $regex, array $constraints) : string
+    {
+        $replaced = $regex;
+
+        foreach ($constraints as $parameter => $value) {
+            $search   = sprintf('(?<%s>%s)', $parameter, $value);
+            $replaced = str_replace($search, sprintf(':%s', $parameter), $replaced);
+        }
+
+        /** @see https://regexr.com/4m6p7 */
+        $replaced = preg_replace_callback(
+            '#(?<optionalPart>(\[.*?\]|\/|\(.*?\))\?)#',
+            function (array $matches) : string {
+                return preg_replace('#\((.*?)\)\??#', '[$1]', $matches['optionalPart']);
+            },
+            $replaced
+        );
+
+        if (strpos($replaced, '?') !== false) {
+            throw InvalidRouteConfigurationException::fromUnsupportedRegexRoute($regex);
+        }
+
+        return stripslashes($replaced);
     }
 
     private function withChildren(array $children) : self
@@ -129,19 +183,27 @@ final class RouteMetadata
         return $this;
     }
 
+    public function priority() : int
+    {
+        $priority = $this->priority;
+        if ($priority === null) {
+            if ($this->parent) {
+                return $this->parent->priority();
+            }
+
+            return 0;
+        }
+
+        return $priority;
+    }
+
     public function convertedRouteType(RoutePluginManager $plugins) : RouteInterface
     {
         try {
-            return $plugins->get($this->type, ['route' => '', 'verb' => '']);
+            return $plugins->get($this->type, ['route' => '', 'verb' => '', 'spec' => '', 'regex' => '']);
         } catch (ServiceNotCreatedException | ServiceNotFoundException $exception) {
             throw InvalidRouteConfigurationException::fromUnsupportedRouteType($this->name(), $this->type);
         }
-    }
-
-    private function constraints() : array
-    {
-        $constraintsFromParents = $this->parent ? $this->parent->constraints() : [];
-        return array_replace($constraintsFromParents, $this->constraints);
     }
 
     public function name() : string
@@ -174,15 +236,6 @@ final class RouteMetadata
         }
     }
 
-    public function path() : string
-    {
-        if ($this->parent) {
-            return $this->parent->path() . $this->path;
-        }
-
-        return $this->path;
-    }
-
     public function defaults() : array
     {
         if ($this->parent) {
@@ -190,20 +243,6 @@ final class RouteMetadata
         }
 
         return $this->defaults;
-    }
-
-    public function priority() : int
-    {
-        $priority = $this->priority;
-        if ($priority === null) {
-            if ($this->parent) {
-                return $this->parent->priority();
-            }
-
-            return 0;
-        }
-
-        return $priority;
     }
 
     public function constraint(string $parameter) : string
@@ -221,5 +260,31 @@ final class RouteMetadata
         }
 
         return '[^\/]+';
+    }
+
+    private function constraints() : array
+    {
+        $constraintsFromParents = $this->parent ? $this->parent->constraints() : [];
+
+        return array_replace($constraintsFromParents, $this->constraints);
+    }
+
+    public function path(bool $calledFromChildRoute = false) : string
+    {
+        $path = $this->path;
+        if ($this->parent) {
+            $path = $this->parent->path(true) . $path;
+        }
+
+        if (! $calledFromChildRoute) {
+            return $path;
+        }
+
+        // Remove optional trailing slash
+        if (substr($path, -3) === '[/]') {
+            $path = substr($path, 0, -3) . '/';
+        }
+
+        return $path;
     }
 }

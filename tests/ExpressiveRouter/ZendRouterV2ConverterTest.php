@@ -8,22 +8,16 @@ use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ConverterInterface;
 use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\InvalidRouteConfigurationException;
 use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ZendRouterV2Converter;
 use Boesing\ZendRouterToExpressiveRouter\Middleware\DummyMiddleware;
+use Boesing\ZendRouterToExpressiveRouter\Router\GenericRoutePluginManagerFactory;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Zend\Expressive\Router\Route;
 use Zend\Router\Http\Chain;
-use Zend\Router\Http\Hostname;
-use Zend\Router\Http\Literal;
-use Zend\Router\Http\Method;
 use Zend\Router\Http\Part;
 use Zend\Router\Http\Placeholder;
-use Zend\Router\Http\Regex;
 use Zend\Router\Http\Scheme;
-use Zend\Router\Http\Segment;
 use Zend\Router\Http\Wildcard;
-use Zend\Router\RouteInvokableFactory;
 use Zend\Router\RoutePluginManager;
-use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 
 use function array_map;
@@ -66,32 +60,7 @@ final class ZendRouterV2ConverterTest extends TestCase
 
     private function routePluginManager() : RoutePluginManager
     {
-        $manager = new RoutePluginManager(new ServiceManager());
-        (new Config([
-            'aliases'   => [
-                'hostname' => Hostname::class,
-                'literal'  => Literal::class,
-                'method'   => Method::class,
-                'part'     => Part::class,
-                'regex'    => Regex::class,
-                'scheme'   => Scheme::class,
-                'segment'  => Segment::class,
-                'wildcard' => Wildcard::class,
-            ],
-            'factories' => [
-                Chain::class    => RouteInvokableFactory::class,
-                Hostname::class => RouteInvokableFactory::class,
-                Literal::class  => RouteInvokableFactory::class,
-                Method::class   => RouteInvokableFactory::class,
-                Part::class     => RouteInvokableFactory::class,
-                Regex::class    => RouteInvokableFactory::class,
-                Scheme::class   => RouteInvokableFactory::class,
-                Segment::class  => RouteInvokableFactory::class,
-                Wildcard::class => RouteInvokableFactory::class,
-            ],
-        ]))->configureServiceManager($manager);
-
-        return $manager;
+        return (new GenericRoutePluginManagerFactory())(new ServiceManager(), RoutePluginManager::class);
     }
 
     /**
@@ -180,7 +149,6 @@ final class ZendRouterV2ConverterTest extends TestCase
             Chain::class       => [Chain::class],
             Part::class        => [Part::class],
             Placeholder::class => [Placeholder::class],
-            Regex::class       => [Regex::class],
             Wildcard::class    => [Wildcard::class],
             'whatever'         => ['whatever'],
         ];
@@ -555,18 +523,72 @@ final class ZendRouterV2ConverterTest extends TestCase
                     ],
                 ],
             ],
+            'regex route with multiple constraints'      => [
+                [
+                    'foo' => [
+                        'type'    => 'regex',
+                        'options' => [
+                            'regex'    => '/blog/(?<id>[a-zA-Z0-9_-]+)(\.(?<format>(json|html|xml|rss)))?',
+                            'defaults' => [],
+                            'spec'     => '/blog/%id%.%format%',
+                        ],
+                    ],
+                ],
+                [
+                    [
+                        'name'            => 'foo',
+                        'path'            => '/blog/{id:[a-zA-Z0-9_-]+}[.{format:json|html|xml|rss}]',
+                        'options'         => [
+                            'defaults' => [],
+                        ],
+                        'allowed_methods' => ZendRouterV2Converter::ANY_REQUEST_METHOD,
+                    ],
+                ],
+            ],
         ];
     }
 
-    public function invalidRouteConfigurationProvider()
+    public function invalidRouteConfigurationProvider() : array
     {
         return [
-            'generic route with optional parameter' => [
+            'generic route with optional parameter in the middle of the path' => [
                 [
                     'foo' => [
                         'type'    => 'segment',
                         'options' => [
                             'route' => '/bar[:baz]/qoo',
+                        ],
+                    ],
+                ],
+            ],
+            'generic route with optional slash in the middle of the path'     => [
+                [
+                    'foo' => [
+                        'type'    => 'segment',
+                        'options' => [
+                            'route' => '/bar[/]qoo',
+                        ],
+                    ],
+                ],
+            ],
+            'regex route with optional parameter in the middle of the path'   => [
+                [
+                    'foo' => [
+                        'type'    => 'regex',
+                        'options' => [
+                            'regex' => '/bar(?<baz>.*?)?/qoo',
+                            'spec'  => '/bar%baz%/qoo',
+                        ],
+                    ],
+                ],
+            ],
+            'regex route with optional slash in the middle of the path'       => [
+                [
+                    'foo' => [
+                        'type'    => 'regex',
+                        'options' => [
+                            'regex' => '/bar/?baz',
+                            'spec'  => '/bar/baz',
                         ],
                     ],
                 ],

@@ -40,4 +40,12 @@ final class InvalidRouteConfigurationException extends RuntimeException
             $routeType
         ));
     }
+
+    public static function fromUnsupportedRegexRoute(string $regex) : self
+    {
+        return new self(sprintf(
+            'Provided regex route "%s" is not supported.',
+            $regex
+        ));
+    }
 }

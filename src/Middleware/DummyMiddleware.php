@@ -14,16 +14,15 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 final class DummyMiddleware implements MiddlewareInterface
 {
-
     public static function __set_state($an_array)
     {
-        return new self;
+        return new self();
     }
 
     /**
      * @inheritDoc
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
     {
         return $handler->handle($request);
     }

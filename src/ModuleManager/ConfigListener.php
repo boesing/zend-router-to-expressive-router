@@ -7,7 +7,6 @@ namespace Boesing\ZendRouterToExpressiveRouter\ModuleManager;
 use Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter\ConverterInterface;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
-use Zend\Expressive\Router\RouterInterface;
 use Zend\ModuleManager\Listener\AbstractListener;
 use Zend\ModuleManager\Listener\ConfigMergerInterface;
 use Zend\ModuleManager\Listener\ListenerOptions;
@@ -48,9 +47,9 @@ final class ConfigListener extends AbstractListenerAggregate
             return;
         }
 
-        $config                         = $configListener->getMergedConfig(false);
-        $routes                         = $config['router']['routes'] ?? [];
-        $convertedRoutes                = $this->converter->convert($routes);
+        $config           = $configListener->getMergedConfig(false);
+        $routes           = $config['router']['routes'] ?? [];
+        $convertedRoutes  = $this->converter->convert($routes);
         $config['routes'] = $convertedRoutes;
         $configListener->setMergedConfig($config);
     }
