@@ -60,9 +60,15 @@
         }
     },
     "scripts": {
+        "analyze": "phpstan analyze --no-progress",
+        "check": [
+            "@cs-check",
+            "@test"
+        ],
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
-        "analyze": "phpstan analyze --no-progress",
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
         "crc": "composer-require-checker check"
     },
     "minimum-stability": "dev",

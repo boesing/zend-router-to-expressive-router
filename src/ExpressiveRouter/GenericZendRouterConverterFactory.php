@@ -27,7 +27,7 @@ final class GenericZendRouterConverterFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $routePluginManagerFactory = new GenericRoutePluginManagerFactory();
-        $plugins = $routePluginManagerFactory($container, RoutePluginManager::class);
+        $plugins                   = $routePluginManagerFactory($container, RoutePluginManager::class);
         Assert::isInstanceOf($plugins, RoutePluginManager::class);
         return new ZendRouterV2Converter(
             new Configuration($this->config),
