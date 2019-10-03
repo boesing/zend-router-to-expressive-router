@@ -91,7 +91,7 @@ final class RouteListenerTest extends TestCase
         $event
             ->expects($this->exactly(2))
             ->method('stopPropagation')
-            ->withConsecutive($this->equalTo(false), $this->equalTo(true));
+            ->withConsecutive([false], [true]);
 
         $this->router
             ->expects($this->once())
@@ -168,7 +168,7 @@ final class RouteListenerTest extends TestCase
         $event
             ->expects($this->exactly(2))
             ->method('stopPropagation')
-            ->withConsecutive($this->equalTo(false), $this->equalTo(true));
+            ->withConsecutive([false], [true]);
 
         $this->router
             ->expects($this->once())
