@@ -32,7 +32,9 @@ final class ZendRouterV2Converter implements ConverterInterface
 {
     public const ANY_REQUEST_METHOD = null;
 
-    /** @see https://github.com/nikic/FastRoute/blob/89aca17bc275eeb2418eecf8301b372f1e772b22/src/RouteParser/Std.php#L26 */
+    /**
+     * @see https://github.com/nikic/FastRoute/blob/89aca17bc275eeb2418eecf8301b372f1e772b22/src/RouteParser/Std.php#L26
+     */
     private const VARIABLE_REGEX = <<<'REGEX'
 \{
     \s* ([a-zA-Z_][a-zA-Z0-9_-]*) \s*
@@ -217,7 +219,11 @@ REGEX;
         $numOptionals                 = strlen($path) - strlen($routeWithoutClosingOptionals);
 
         // Split on [ while skipping placeholders
-        $segments = (array) preg_split('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \[~x', $routeWithoutClosingOptionals);
+        $segments = (array) preg_split(
+            '~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \[~x',
+            $routeWithoutClosingOptionals
+        );
+
         if ($numOptionals !== count($segments) - 1) {
             // If there are any ] in the middle of the route, throw a more specific error message
             if (preg_match('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \]~x', $routeWithoutClosingOptionals)) {

@@ -18,7 +18,8 @@ final class InvalidRouteConfigurationException extends RuntimeException
     public static function fromUnreachableRoute(string $routeName) : self
     {
         return new self(sprintf(
-            'Found route with name "%s" which is unreachable due to missing `child_routes` and `may_terminate` false configuration.',
+            'Found route with name "%s" which is unreachable due to missing `child_routes` and `may_terminate` '
+            . 'false configuration.',
             $routeName
         ));
     }
@@ -26,7 +27,8 @@ final class InvalidRouteConfigurationException extends RuntimeException
     public static function fromUnsupportedOptionalRoutePart(string $routeName, string $route) : self
     {
         return new self(sprintf(
-            'Route "%s" contains unsupported optional part in its path. Cannot create a proper route for all child routes in that case: %s',
+            'Route "%s" contains unsupported optional part in its path. Cannot create a proper route for all child '
+            . 'routes in that case: %s',
             $routeName,
             $route
         ));

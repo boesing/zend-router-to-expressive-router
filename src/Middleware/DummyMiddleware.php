@@ -14,7 +14,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 final class DummyMiddleware implements MiddlewareInterface
 {
-    public static function __set_state($an_array)
+    public static function __set_state()
     {
         return new self();
     }
