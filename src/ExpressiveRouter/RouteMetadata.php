@@ -83,10 +83,8 @@ final class RouteMetadata
 
         $metadatas = [];
         foreach ($routes as $route => $details) {
-            $metadata = self::fromZendRouterRouteConfiguration($route, $details);
-            if ($parent) {
-                $metadata = $metadata->withParent($parent);
-            }
+            $metadata         = self::fromZendRouterRouteConfiguration($route, $details);
+            $metadata->parent = $parent;
 
             $metadatas[] = $metadata;
         }
@@ -174,13 +172,6 @@ final class RouteMetadata
     private function withChildren(array $children) : self
     {
         $this->children = self::collection($children, $this);
-
-        return $this;
-    }
-
-    private function withParent(RouteMetadata $parent) : self
-    {
-        $this->parent = $parent;
 
         return $this;
     }

@@ -17,6 +17,6 @@
 
     <!-- Include all rules from the Zend Coding Standard -->
     <rule ref="ZendCodingStandard">
-        <exclude name="SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod"/>
+        <exclude name="Generic.CodeAnalysis.UselessOverridingMethod.Found"/>
     </rule>
 </ruleset>
