@@ -19,13 +19,13 @@ use function array_merge;
 use function array_values;
 use function count;
 use function in_array;
-use function preg_match;
-use function preg_match_all;
 use function preg_quote;
-use function preg_replace;
-use function preg_split;
 use function rtrim;
-use function sprintf;
+use function Safe\preg_match;
+use function Safe\preg_match_all;
+use function Safe\preg_replace;
+use function Safe\preg_split;
+use function Safe\sprintf;
 use function strlen;
 
 final class ZendRouterV2Converter implements ConverterInterface
@@ -205,7 +205,7 @@ REGEX;
             $searchAndReplace[$searchValue] = sprintf('{%s}', $parameterValue);
         }
 
-        return (string) preg_replace(array_keys($searchAndReplace), array_values($searchAndReplace), $path);
+        return preg_replace(array_keys($searchAndReplace), array_values($searchAndReplace), $path);
     }
 
     /**

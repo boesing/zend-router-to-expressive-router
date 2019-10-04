@@ -6,7 +6,7 @@ namespace Boesing\ZendRouterToExpressiveRouter\ExpressiveRouter;
 
 use RuntimeException;
 
-use function sprintf;
+use function Safe\sprintf;
 
 final class InvalidRouteConfigurationException extends RuntimeException
 {

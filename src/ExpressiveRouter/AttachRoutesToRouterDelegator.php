@@ -12,7 +12,7 @@ use Zend\ServiceManager\Exception\InvalidServiceException;
 use Zend\ServiceManager\Factory\DelegatorFactoryInterface;
 
 use function is_array;
-use function sprintf;
+use function Safe\sprintf;
 
 final class AttachRoutesToRouterDelegator implements DelegatorFactoryInterface
 {

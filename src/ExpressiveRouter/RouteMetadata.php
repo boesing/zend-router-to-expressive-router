@@ -10,7 +10,6 @@ use Zend\Router\RoutePluginManager;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
-use function array_combine;
 use function array_key_exists;
 use function array_keys;
 use function array_map;
@@ -18,17 +17,18 @@ use function array_replace;
 use function array_replace_recursive;
 use function count;
 use function explode;
-use function preg_match;
-use function preg_match_all;
 use function preg_replace_callback;
-use function sprintf;
+use function Safe\array_combine;
+use function Safe\preg_match;
+use function Safe\preg_match_all;
+use function Safe\sprintf;
+use function Safe\substr;
+use function Safe\usort;
 use function str_replace;
 use function stripslashes;
 use function strpos;
 use function strtoupper;
-use function substr;
 use function trim;
-use function usort;
 
 final class RouteMetadata
 {
@@ -147,7 +147,7 @@ final class RouteMetadata
             throw InvalidRouteConfigurationException::fromUnsupportedRegexRoute($regex);
         }
 
-        return (array) array_combine($matches['names'] ?? [], $matches['constraints'] ?? []);
+        return array_combine($matches['names'] ?? [], $matches['constraints'] ?? []);
     }
 
     private static function convertRegexToSegmentRoute(string $regex, array $constraints) : string

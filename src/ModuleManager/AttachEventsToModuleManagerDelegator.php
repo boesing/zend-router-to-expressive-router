@@ -9,7 +9,7 @@ use Zend\ModuleManager\ModuleManager;
 use Zend\ServiceManager\Exception\InvalidServiceException;
 use Zend\ServiceManager\Factory\DelegatorFactoryInterface;
 
-use function sprintf;
+use function Safe\sprintf;
 
 final class AttachEventsToModuleManagerDelegator implements DelegatorFactoryInterface
 {

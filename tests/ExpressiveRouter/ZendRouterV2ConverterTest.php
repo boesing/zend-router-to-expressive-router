@@ -611,7 +611,7 @@ final class ZendRouterV2ConverterTest extends TestCase
                     ],
                 ],
             ],
-            'regex route with parameter which allows anything' => [
+            'regex route with parameter which allows anything'                                            => [
                 [
                     'foo' => [
                         'type'    => 'regex',
