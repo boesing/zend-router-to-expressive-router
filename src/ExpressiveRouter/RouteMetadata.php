@@ -16,10 +16,10 @@ use function array_keys;
 use function array_map;
 use function array_replace;
 use function array_replace_recursive;
+use function count;
 use function explode;
 use function preg_match;
 use function preg_match_all;
-use function preg_replace;
 use function preg_replace_callback;
 use function sprintf;
 use function str_replace;
@@ -135,8 +135,16 @@ final class RouteMetadata
     private static function extractConstraintsFromRegexDefinition(string $regex) : array
     {
         $matches = [];
-        if (! preg_match_all('#\(\?<(?<names>.*?)>(?<constraints>.*?\)?)\)#', $regex, $matches)) {
+        /** @see https://regex101.com/r/jVtyN5/1 */
+        if (! preg_match_all('#\(\?<(?<names>[a-zA-Z]+)>(?<constraints>(\(((?>[^()]+)|(?R))*\)|\[((?>[^\[\]]+)|(?R))*\](\+|\{\d?,\d?\})?)?)\)#', $regex, $matches)) {
             return [];
+        }
+
+        $names       = $matches['names'] ?? [];
+        $constraints = $matches['constraints'] ?? [];
+
+        if (count($names) !== count($constraints)) {
+            throw InvalidRouteConfigurationException::fromUnsupportedRegexRoute($regex);
         }
 
         return (array) array_combine($matches['names'] ?? [], $matches['constraints'] ?? []);
@@ -153,9 +161,10 @@ final class RouteMetadata
 
         /** @see https://regexr.com/4m6p7 */
         $replaced = preg_replace_callback(
-            '#(?<optionalPart>(\[.*?\]|\/|\(.*?\))\?)#',
+            '#(?<optionalPart>(\[.*?\]|\/|\(.*?\)))\?#',
             function (array $matches) : string {
-                return preg_replace('#\((.*?)\)\??#', '[$1]', $matches['optionalPart']);
+                $optionalPart = trim($matches['optionalPart'], '()');
+                return sprintf('[%s]', $optionalPart);
             },
             $replaced
         );
