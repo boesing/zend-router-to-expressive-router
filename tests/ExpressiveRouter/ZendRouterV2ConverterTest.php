@@ -611,6 +611,28 @@ final class ZendRouterV2ConverterTest extends TestCase
                     ],
                 ],
             ],
+            'regex route with parameter which allows anything' => [
+                [
+                    'foo' => [
+                        'type'    => 'regex',
+                        'options' => [
+                            'regex'    => '/foo/(?<bar>.*)',
+                            'defaults' => [],
+                            'spec'     => '/foo/%bar%',
+                        ],
+                    ],
+                ],
+                [
+                    [
+                        'name'            => 'foo',
+                        'path'            => '/foo/{bar:.*}',
+                        'options'         => [
+                            'defaults' => [],
+                        ],
+                        'allowed_methods' => ZendRouterV2Converter::ANY_REQUEST_METHOD,
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -655,17 +677,6 @@ final class ZendRouterV2ConverterTest extends TestCase
                         'options' => [
                             'regex' => '/bar/?baz',
                             'spec'  => '/bar/baz',
-                        ],
-                    ],
-                ],
-            ],
-            'regex route with character list containing escaped bracket'      => [
-                [
-                    'foo' => [
-                        'type'    => 'regex',
-                        'options' => [
-                            'regex' => '/bar/(?<foo>([\)]))',
-                            'spec'  => '/bar/%foo%',
                         ],
                     ],
                 ],

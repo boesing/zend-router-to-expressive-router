@@ -136,7 +136,7 @@ final class RouteMetadata
     {
         $matches = [];
         /** @see https://regex101.com/r/jVtyN5/1 */
-        if (! preg_match_all('#\(\?<(?<names>[a-zA-Z]+)>(?<constraints>(\(((?>[^()]+)|(?R))*\)|\[((?>[^\[\]]+)|(?R))*\](\+|\{\d?,\d?\})?)?)\)#', $regex, $matches)) {
+        if (! preg_match_all('#\(\?<(?<names>[a-zA-Z]+)>(?<constraints>(\(((?>[^()]+)|(?R))*\)|\[((?>[^\[\]]+)|(?R))*\](\+|\{\d?,\d?\})?)?|.*?)\)#', $regex, $matches)) {
             return [];
         }
 
