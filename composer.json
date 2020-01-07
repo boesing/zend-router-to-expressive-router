@@ -13,7 +13,6 @@
         "php": "^7.3",
         "container-interop/container-interop": "^1.2",
         "fig/http-message-util": "^1.1",
-        "phpstan/phpstan-webmozart-assert": "^0.11.3",
         "psr/http-message": "^1.0",
         "psr/http-server-handler": "^1.0",
         "psr/http-server-middleware": "^1.0",
@@ -36,6 +35,7 @@
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.11.15",
         "phpstan/phpstan-phpunit": "^0.11.2",
+        "phpstan/phpstan-webmozart-assert": "^0.11",
         "phpunit/phpunit": "^8.3",
         "thecodingmachine/phpstan-safe-rule": "^0.1.4",
         "zendframework/zend-coding-standard": "^2.0"
